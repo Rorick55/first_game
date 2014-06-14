@@ -3,7 +3,7 @@ class Player
     @window = window
     @icon = Gosu::Image.new(@window, 'spaceship.png', true)
     @x = 0
-    @y = 0
+    @y = @window.height - @icon.width
   end
 
   def draw

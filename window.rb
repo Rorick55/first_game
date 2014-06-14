@@ -1,11 +1,13 @@
 class Window < Gosu::Window
   def initialize
-    super(800, 800, false)
+    super(700, 600, false)
     @player = Player.new(self)
+    @enemy = Enemy.new(self)
   end
 
   def draw
     @player.draw
+    @enemy.draw
   end
 
   def update
@@ -15,5 +17,6 @@ class Window < Gosu::Window
     if button_down? Gosu::KbRight
       @player.move_right
     end
+    @enemy.update
   end
 end
