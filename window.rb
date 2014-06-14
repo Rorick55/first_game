@@ -1,6 +1,6 @@
 class Window < Gosu::Window
   def initialize
-    super(300, 300, false)
+    super(800, 800, false)
     @player = Player.new(self)
   end
 
@@ -8,4 +8,12 @@ class Window < Gosu::Window
     @player.draw
   end
 
+  def update
+    if button_down? Gosu::KbLeft
+      @player.move_left
+    end
+    if button_down? Gosu::KbRight
+      @player.move_right
+    end
+  end
 end
