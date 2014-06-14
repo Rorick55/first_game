@@ -1,28 +1,87 @@
 require 'gosu'
 
-class GameWindow < Gosu::Window
-
-  def initialize(width, height, fullscreen)
-    super(width, height, fullscreen)
-
-    @sprite = Gosu::Image.new(self, "Smoke.png", false)
-    @x = 800/2
-    @y = 600/2
-    @total_time = 0
-
+class Player
+  def initialize(window)
+    @image = Gosu::Image.new(window, "spaceship.png", false)
+    @x = @y = @vel_x = @vel_y = @angle = 0.0
+    @score = 0
   end
 
-  def update
-    @total_time += 16.0
-    @y = (600/2) + Math.sin(@total_time * 0.01) * 100
+  def warp(x, y)
+    @x, @y = x, y
+  end
+
+  def turn_left
+    @angle -= 4.5
+  end
+
+  def turn_right
+    @angle += 4.5
+  end
+
+  def accelerate
+    @vel_x += Gosu::offset_x(@angle, -0.5)
+    @vel_y += Gosu::offset_y(@angle, -0.5)
+  end
+
+  def reverse
+    @vel_x += Gosu::offset_x(@angle, 0.5)
+    @vel_y += Gosu::offset_y(@angle, 0.5)
+  end
+
+  def move
+    @x += @vel_x
+    @y += @vel_y
+    @x %= 640
+    @y %= 480
+
+    @vel_x *= 0.95
+    @vel_y *= 0.95
   end
 
   def draw
-    @sprite.draw(@x, @y, 0)
+    @image.draw_rot(@x, @y, 1, @angle)
+  end
+end
+
+
+class GameWindow < Gosu::Window
+  def initialize
+    super(640, 480, false)
+    self.caption = "Gosu Tutorial Game"
+
+    @background_image = Gosu::Image.new(self, "cloth_bowl.png", true)
+    @player = Player.new(self)
+    @player.warp(320, 240)
   end
 
+  def update
+    if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
+      @player.turn_left
+    end
+    if button_down? Gosu::KbRight or button_down? Gosu::GpRight then
+      @player.turn_right
+    end
+    if button_down? Gosu::KbUp or button_down? Gosu::GpButton0 then
+      @player.accelerate
+    end
+    if button_down? Gosu::KbDown or button_down? Gosu::GpButton1 then
+      @player.reverse
+    end
+    @player.move
+  end
 
+  def draw
+    @background_image.draw(0, 0, 0)
+    @player.draw
+  end
+
+  def button_down(id)
+    if id == Gosu::KbEscape
+      close
+    end
+  end
 end
-game_window = GameWindow.new(800, 600, false)
 
-game_window.show
+window = GameWindow.new
+window.show
