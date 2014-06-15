@@ -1,5 +1,5 @@
 class Player
-  attr_reader :lives
+  attr_reader :lives, :x, :y, :lasers
   def initialize(window)
     @window = window
     @icon = Gosu::Image.new(@window, 'spaceship.png', true)
@@ -8,13 +8,32 @@ class Player
     @explosion = Gosu::Image.new(@window, 'explosion.png', true)
     @exploded = false
     @lives = 3
+    @lasers = rand(8).times.map {laser.new(self)}
+  end
+
+  def update
+     if @window.button_down? Gosu::KbLeft
+      move_left
+    end
+    if @window.button_down? Gosu::KbRight
+      move_right
+    end
+    if @window.button_down? Gosu::KbSpace
+      @lasers.each do |laser|
+        if laser.y = @y + 45
+          laser.shoot
+        end
+      end
+    end
+    @lasers.each {|laser| laser.update}
   end
 
   def draw
     if @exploded
-      @explosion.draw(@x, @y, 4)
+      @explosion.draw(@x, @y, 5)
     else
-      @icon.draw(@x, @y, 1)
+      @icon.draw(@x, @y, 3)
+      @lasers.each {|laser| laser.draw}
     end
   end
 

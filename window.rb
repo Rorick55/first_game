@@ -1,17 +1,19 @@
 class Window < Gosu::Window
   def initialize
-    super(700, 600, false)
+    super(800, 600, false)
     @player = Player.new(self)
     @enemys = [Enemy.new(self), Enemy.new(self)]
-    @enemys = 3.times.map {Enemy.new(self)}
+    @enemys = rand(8).times.map {Enemy.new(self)}
     @running = true
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+    @background = Gosu::Image.new(self, 'space.png', true)
   end
 
   def draw
     @player.draw
-    @enemys.each {|enemy| enemy.draw}
+    live_enemys.each {|enemy| enemy.draw}
     @font.draw("Lives:#{@player.lives}", 10, 10, 3.0, 1.0, 1.0, 0xffffffff)
+    @background.draw(0, 0, 1)
   end
 
   def update
@@ -23,20 +25,19 @@ class Window < Gosu::Window
         run_game
       end
     end
-
     if @running == false and button_down? Gosu::Button::KbR and @player.lives > 0
+      @enemys.each {|enemy| enemy.reset}
       @running = true
       @player.reset_position
     end
   end
 
+  def live_enemys
+    @enemys.select {|enemy| enemy.alive == true}
+  end
+
   def run_game
-   if button_down? Gosu::KbLeft
-      @player.move_left
-    end
-    if button_down? Gosu::KbRight
-      @player.move_right
-    end
-    @enemys.each {|enemy| enemy.update}
+    live_enemys.each {|enemy| enemy.update(@player.laser)}
+    @player.update
   end
 end
