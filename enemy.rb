@@ -29,7 +29,6 @@ class Enemy
 
   def hit_by?(lasers)
     if lasers.any? {|laser| Gosu::distance(laser.x + 20, laser.y + 20, @x + 20, @y - 20) < 50}
-
       @alive = false
     end
   end

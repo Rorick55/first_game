@@ -40,8 +40,17 @@ class Window < Gosu::Window
   end
 
   def run_game
-    live_enemies.each {|enemy| enemy.update(@player.lasers)}
-    live_enemies.each {|enemy| enemy.update(@player.bombs)}
+    live_enemies.each do |enemy|
+
+      if enemy.update(@player.lasers) == false
+        @player.increase_score(1)
+      end
+    end
+    live_enemies.each do |enemy|
+      if enemy.update(@player.bombs) == false
+        @player.increase_score(1)
+      end
+    end
     @player.update
     @timer.update
   end

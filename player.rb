@@ -28,7 +28,7 @@ class Player
         end
       end
     end
-    if @window.button_down? Gosu::KbB
+    if @window.button_down? Gosu::KbUp
       @bombs.each do |bomb|
         bomb.shoot
         if bomb.y < 0
@@ -70,6 +70,10 @@ class Player
     end
   end
 
+  def increase_score(times)
+    @score = score + (10*times)
+  end
+
   def hit_by?(enemys)
     @exploded = enemys.any? {|enemy| Gosu::distance(enemy.x + 20, enemy.y + 20, @x + 50, @y + 50) < 40}
     if @exploded
@@ -79,6 +83,6 @@ class Player
   end
 
   def reset_position
-    @x = rand(@window.width - @icon.width)
+    @x = (@window.width - @icon.width) / 2
   end
 end
