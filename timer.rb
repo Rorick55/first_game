@@ -11,7 +11,7 @@ class Timer
 
   def update
     (@last_recorded_seconds/4).times {@enemies << Enemy.new(@window)} if add_enemies?
-    # @player.add_bombs if add_bombs?
+    @player.add_bombs if add_bombs?
   end
 
   def seconds
@@ -27,13 +27,13 @@ class Timer
     end
   end
 
-  # def add_bombs?
-  #   if seconds != @last_second and seconds % 5 == 0
-  #      @last_second = seconds
-  #     true
-  #   else
-  #     false
-  #   end
-  # end
+  def add_bombs?
+    if seconds != @last_second and seconds % 5 == 0
+       @last_second = seconds
+      true
+    else
+      false
+    end
+  end
 end
 

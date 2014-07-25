@@ -16,7 +16,7 @@ class Player
   end
 
   def update
-     if @window.button_down? Gosu::KbLeft
+    if @window.button_down? Gosu::KbLeft
       move_left
     end
     if @window.button_down? Gosu::KbRight
@@ -30,13 +30,10 @@ class Player
       end
     end
     if @window.button_down? Gosu::KbUp
-      #@bomb_count = @bomb_count - 1
+      @bomb_count = @bomb_count - 1
       @bombs.each do |bomb|
         bomb.shoot
       end
-      #  if @bombs.any? {|bomb| bomb.y < 1}
-      #   @bomb_count = @bomb_count - 1
-      # end
     end
     if @bomb_count == 0
       @bombs = []
@@ -69,11 +66,11 @@ class Player
     end
   end
 
-  # def add_bombs
-  #   if @bombs.length < 11
-  #     @bombs << Bomb.new(self, @window)
-  #   end
-  # end
+  def add_bombs
+    if @bombs.length < 7
+      @bombs << Bomb.new(self, @window)
+    end
+  end
 
   def increase_score(times)
     @score = score + (10*times)
