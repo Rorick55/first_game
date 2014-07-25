@@ -16,6 +16,7 @@ class Bomb
 
   def update
     if @shooting
+      @player.bomb_count -= 1
       @y = @y - 10
       @x = @x - @xs
       if @y < 0

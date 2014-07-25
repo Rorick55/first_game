@@ -28,7 +28,7 @@ class Timer
   end
 
   def add_bombs?
-    if seconds != @last_second and seconds % 5 == 0
+    if seconds != @last_second and seconds % 10 == 0
        @last_second = seconds
       true
     else

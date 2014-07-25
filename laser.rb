@@ -6,7 +6,7 @@ class Laser
     @shooting = false
     @x = @player.x + 45
     @y = @player.y + 45
-    @icon = Gosu::Image.new(@window, 'lightning.png', true)
+    @icon = Gosu::Image.new(@window, 'laser.png', true)
   end
 
   def shoot

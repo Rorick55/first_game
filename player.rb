@@ -1,8 +1,8 @@
 class Player
-  attr_reader :lives, :x, :y, :lasers, :bombs, :score, :bomb_count
+  attr_accessor :lives, :x, :y, :lasers, :bombs, :score, :bomb_count
   def initialize(window)
     @window = window
-    @icon = Gosu::Image.new(@window, 'wizard-head.png', true)
+    @icon = Gosu::Image.new(@window, 'spaceship.png', true)
     @x = 0
     @y = @window.height - @icon.width
     @explosion = Gosu::Image.new(@window, 'explosion.png', true)
@@ -11,7 +11,7 @@ class Player
     @score = 0
     @lasers = 10.times.map {Laser.new(self, @window)}
     @bombs = 10.times.map {Bomb.new(self, @window)}
-    @bomb_count = 50
+    @bomb_count = 3030
     #@lasers = [Laser.new(self, @window), Laser.new(self, @window), Laser.new(self, @window), Laser.new(self, @window)]
   end
 
@@ -30,13 +30,11 @@ class Player
       end
     end
     if @window.button_down? Gosu::KbUp
-      @bombs.each do |bomb|
-        bomb.shoot
+      if @bomb_count > 0
+        @bombs.each do |bomb|
+          bomb.shoot
+        end
       end
-      @bomb_count -= 1
-    end
-    if @bomb_count <= 0
-      @bombs = []
     end
     @lasers.each {|laser| laser.update}
     @bombs.each {|bomb| bomb.update}
@@ -67,9 +65,7 @@ class Player
   end
 
   def add_bombs
-    if @bombs.length < 7
-      @bombs << Bomb.new(self, @window)
-    end
+    @bomb_count += 520
   end
 
   def increase_score(times)
