@@ -11,7 +11,7 @@ class Player
     @score = 0
     @lasers = 10.times.map {Laser.new(self, @window)}
     @bombs = 10.times.map {Bomb.new(self, @window)}
-    @bomb_count = 5
+    @bomb_count = 50
     #@lasers = [Laser.new(self, @window), Laser.new(self, @window), Laser.new(self, @window), Laser.new(self, @window)]
   end
 
@@ -30,12 +30,12 @@ class Player
       end
     end
     if @window.button_down? Gosu::KbUp
-      @bomb_count = @bomb_count - 1
       @bombs.each do |bomb|
         bomb.shoot
       end
+      @bomb_count -= 1
     end
-    if @bomb_count == 0
+    if @bomb_count <= 0
       @bombs = []
     end
     @lasers.each {|laser| laser.update}
